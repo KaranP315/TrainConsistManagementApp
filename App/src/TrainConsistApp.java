@@ -1,19 +1,21 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
 class Bogie {
     String name;
     int capacity;
+    String type; // Passenger / Goods
 
-    public Bogie(String name, int capacity) {
+    public Bogie(String name, int capacity, String type) {
         this.name = name;
         this.capacity = capacity;
+        this.type = type;
     }
 
     public String toString() {
         return name + " (" + capacity + ")";
     }
 }
-
-import java.util.*;
-        import java.util.stream.Collectors;
 
 public class TrainConsistApp {
 
@@ -24,20 +26,24 @@ public class TrainConsistApp {
         // Step 1: Create list
         List<Bogie> bogies = new ArrayList<>();
 
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 60));
-        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Sleeper", 72, "Passenger"));
+        bogies.add(new Bogie("AC Chair", 60, "Passenger"));
+        bogies.add(new Bogie("First Class", 24, "Passenger"));
+        bogies.add(new Bogie("Cargo Box", 100, "Goods"));
+        bogies.add(new Bogie("Oil Tank", 120, "Goods"));
 
-        // Step 2: Apply Stream filter
-        List<Bogie> filteredBogies = bogies.stream()
-                .filter(b -> b.capacity > 60)
-                .collect(Collectors.toList());
+        // Step 2: Group using Stream
+        Map<String, List<Bogie>> grouped = bogies.stream()
+                .collect(Collectors.groupingBy(b -> b.type));
 
-        // Step 3: Display result
-        System.out.println("\nFiltered Bogies (Capacity > 60):");
+        // Step 3: Display grouped data
+        System.out.println("\nGrouped Bogies:");
 
-        for (Bogie b : filteredBogies) {
-            System.out.println(b);
+        for (Map.Entry<String, List<Bogie>> entry : grouped.entrySet()) {
+            System.out.println("\nType: " + entry.getKey());
+            for (Bogie b : entry.getValue()) {
+                System.out.println("  " + b);
+            }
         }
     }
 }

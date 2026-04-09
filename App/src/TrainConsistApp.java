@@ -13,6 +13,7 @@ class Bogie {
 }
 
 import java.util.*;
+        import java.util.stream.Collectors;
 
 public class TrainConsistApp {
 
@@ -20,21 +21,22 @@ public class TrainConsistApp {
 
         System.out.println("=== Train Consist Management App ===");
 
-        // Step 1: Create List of Bogies
+        // Step 1: Create list
         List<Bogie> bogies = new ArrayList<>();
 
-        // Step 2: Add bogies
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 60));
         bogies.add(new Bogie("First Class", 24));
 
-        // Step 3: Sort using Comparator (by capacity)
-        bogies.sort(Comparator.comparingInt(b -> b.capacity));
+        // Step 2: Apply Stream filter
+        List<Bogie> filteredBogies = bogies.stream()
+                .filter(b -> b.capacity > 60)
+                .collect(Collectors.toList());
 
-        // Step 4: Display sorted bogies
-        System.out.println("\nBogies sorted by capacity:");
+        // Step 3: Display result
+        System.out.println("\nFiltered Bogies (Capacity > 60):");
 
-        for (Bogie b : bogies) {
+        for (Bogie b : filteredBogies) {
             System.out.println(b);
         }
     }

@@ -1,6 +1,15 @@
-import java.util.Scanner;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+import java.util.*;
+
+class GoodsBogie {
+    String type;   // Cylindrical / Rectangular
+    String cargo;  // Petroleum / Coal / etc.
+
+    public GoodsBogie(String type, String cargo) {
+        this.type = type;
+        this.cargo = cargo;
+    }
+}
+
 
 public class TrainConsistApp {
 
@@ -8,37 +17,25 @@ public class TrainConsistApp {
 
         System.out.println("=== Train Consist Management App ===");
 
-        Scanner sc = new Scanner(System.in);
+        // Step 1: Create goods bogies
+        List<GoodsBogie> goods = new ArrayList<>();
 
-        // Step 1: Get user input
-        System.out.print("Enter Train ID: ");
-        String trainId = sc.nextLine();
+        goods.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        goods.add(new GoodsBogie("Rectangular", "Coal"));
+        goods.add(new GoodsBogie("Cylindrical", "Petroleum"));
 
-        System.out.print("Enter Cargo Code: ");
-        String cargoCode = sc.nextLine();
+        // Step 2: Apply safety validation
+        boolean isSafe = goods.stream()
+                .allMatch(b ->
+                        !b.type.equals("Cylindrical") ||
+                                b.cargo.equals("Petroleum")
+                );
 
-        // Step 2: Define Regex Patterns
-        Pattern trainPattern = Pattern.compile("TRN-\\d{4}");
-        Pattern cargoPattern = Pattern.compile("PET-[A-Z]{2}");
-
-        // Step 3: Create Matcher
-        Matcher trainMatcher = trainPattern.matcher(trainId);
-        Matcher cargoMatcher = cargoPattern.matcher(cargoCode);
-
-        // Step 4: Validate Train ID
-        if (trainMatcher.matches()) {
-            System.out.println("Valid Train ID");
+        // Step 3: Display result
+        if (isSafe) {
+            System.out.println("\nTrain is SAFE for operation");
         } else {
-            System.out.println("Invalid Train ID");
+            System.out.println("\nTrain is NOT SAFE (Invalid cargo detected)");
         }
-
-        // Step 5: Validate Cargo Code
-        if (cargoMatcher.matches()) {
-            System.out.println("Valid Cargo Code");
-        } else {
-            System.out.println("Invalid Cargo Code");
-        }
-
-        sc.close();
     }
 }
